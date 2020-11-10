@@ -14,13 +14,14 @@ if ! hash pkger >/dev/null 2>&1; then
 fi
 
 # pkger generate
-if test ! -f pkged.go
-then
+if test ! -f pkged.go; then
   echo "Running pkger to bundle static assets..."
   pkger
 fi
 
 # static go build
 echo "Creating static binary..."
-GOPATH=$(pwd)/go CGO_ENABLED=0 go build -o "${EXENAME}"
+GOPATH=$(pwd)/go \
+CGO_ENABLED=0 \
+  go build -o "${EXENAME}"
 echo "...created binary '${EXENAME}'"
