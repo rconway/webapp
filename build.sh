@@ -7,6 +7,7 @@ BIN_DIR="$(pwd)"
 trap "cd '${ORIG_DIR}'" EXIT
 
 EXENAME="${1:-$(basename "$PWD")}"
+GOPATH_BUILD="${GOPATH_BUILD:-$(pwd)/go}"
 
 if ! hash pkger >/dev/null 2>&1; then
   echo "Install pkger tool with 'go get'..."
@@ -21,7 +22,7 @@ fi
 
 # static go build
 echo "Creating static binary..."
-GOPATH=$(pwd)/go \
+GOPATH="$GOPATH_BUILD" \
 CGO_ENABLED=0 \
   go build -o "${EXENAME}"
 echo "...created binary '${EXENAME}'"
