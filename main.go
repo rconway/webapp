@@ -66,12 +66,21 @@ func main() {
 	// API
 	newApiRouter("/api", router.PathPrefix("/api").Subrouter())
 
-	// Application (SPA)
+	// Application (SPA - Reactjs)
 	{
-		// This is at the root URL path since Reactjs doesn't seem to accommodate a path
-		// prefix very easily.
-		prefix := ""
-		appSubRouter := router.PathPrefix("").Subrouter()
+		// We can use a prefix for the SPA app, as long as we specify the same prefix in the "homepage" field
+		// in the package.json file...
+		// ```
+		// {
+		//   "homepage": "/app"
+		// }
+		//
+		// $ npm run build
+		// ```
+		prefix := "/app"
+		// Create a subrouter at the prefix path
+		appSubRouter := router.PathPrefix(prefix).Subrouter()
+		// Create the app route handler with the subrouter and the prefix.
 		newAppRouter(prefix, appSubRouter)
 	}
 
