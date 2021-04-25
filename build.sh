@@ -11,17 +11,6 @@ EXENAME="${1:-$(basename "$PWD")}"
 export GOPATH="${GOPATH_BUILD:-$(pwd)/go}"
 export PATH="${GOPATH}/bin:${PATH}"
 
-if ! hash pkger >/dev/null 2>&1; then
-  echo "Install pkger tool with 'go get'..."
-  go get -v github.com/markbates/pkger/cmd/pkger
-fi
-
-# pkger generate
-if test ! -f pkged.go; then
-  echo "Running pkger to bundle static assets..."
-  pkger
-fi
-
 # static go build
 echo "Creating static binary..."
 CGO_ENABLED=0 go build -o "${EXENAME}"

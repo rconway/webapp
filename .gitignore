@@ -16,6 +16,5 @@
 
 /go
 /go-alpine
-pkged.go
 webapp
 webapp-alpine
