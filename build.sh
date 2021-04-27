@@ -6,12 +6,10 @@ BIN_DIR="$(pwd)"
 
 trap "cd '${ORIG_DIR}'" EXIT
 
-EXENAME="${1:-$(basename "$PWD")}"
+EXENAME="${1:-$(basename "$PWD")-alpine}"
 
-export GOPATH="${GOPATH_BUILD:-$(pwd)/go}"
-export PATH="${GOPATH}/bin:${PATH}"
+# React app...
+./build-app.sh
 
-# static go build
-echo "Creating static binary..."
-CGO_ENABLED=0 go build -o "${EXENAME}"
-echo "...created binary '${EXENAME}'"
+# static go build...
+./build-exe.sh
