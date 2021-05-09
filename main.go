@@ -28,10 +28,24 @@ func loggingMiddleware(h http.Handler) http.Handler {
 // Simulated API endpoint
 //================================================================================================================
 
+func apiUserHandler(router *mux.Router) {
+	router.PathPrefix("/{name}").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		fmt.Fprintf(w, "zzz: api -> Hello user %v\n", vars["name"])
+	})
+	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "zzz: api -> user route\n")
+	})
+}
+
 func newApiRouter(prefix string, router *mux.Router) *mux.Router {
+	// /user
+	apiUserHandler(router.PathPrefix("/user").Subrouter())
+	// /fred
 	router.PathPrefix("/fred").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "zzz: api -> fred route\n")
 	})
+	// Root
 	router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "zzz: api -> / route\n")
 	})
