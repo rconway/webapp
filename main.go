@@ -16,12 +16,23 @@ import (
 var appRoot embed.FS
 var wwwRoot, _ = fs.Sub(appRoot, "app/build")
 
+//go:embed swagger-ui
+var swaggerRoot embed.FS
+
 //================================================================================================================
 // Middlewares
 //================================================================================================================
 
 func loggingMiddleware(h http.Handler) http.Handler {
 	return handlers.CombinedLoggingHandler(os.Stdout, h)
+}
+
+//================================================================================================================
+// swagger-ui docs
+//================================================================================================================
+
+func apiSwaggerHandler(prefix string, router *mux.Router) {
+	router.PathPrefix("").Handler(http.StripPrefix(prefix, http.FileServer(http.FS(swaggerRoot))))
 }
 
 //================================================================================================================
@@ -39,6 +50,8 @@ func apiUserHandler(router *mux.Router) {
 }
 
 func newApiRouter(prefix string, router *mux.Router) *mux.Router {
+	// swagger-ui
+	apiSwaggerHandler(prefix, router.PathPrefix("/swagger-ui").Subrouter())
 	// /user
 	apiUserHandler(router.PathPrefix("/user").Subrouter())
 	// /fred
