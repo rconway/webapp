@@ -15,5 +15,6 @@
 # vendor/
 
 goroot*/
+go/
 webapp
 webapp-alpine
