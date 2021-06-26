@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"fmt"
 	"io/fs"
 	"net/http"
 	"os"
@@ -10,14 +9,12 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rconway/goutils/httputils"
+	"github.com/rconway/webapp/api"
 )
 
 //go:embed app/build
 var appRoot embed.FS
 var wwwRoot, _ = fs.Sub(appRoot, "app/build")
-
-//go:embed swagger-ui
-var swaggerRoot embed.FS
 
 //================================================================================================================
 // Middlewares
@@ -25,47 +22,6 @@ var swaggerRoot embed.FS
 
 func loggingMiddleware(h http.Handler) http.Handler {
 	return handlers.CombinedLoggingHandler(os.Stdout, h)
-}
-
-//================================================================================================================
-// swagger-ui docs
-//================================================================================================================
-
-func apiSwaggerHandler(prefix string, router *mux.Router) {
-	router.PathPrefix("").Handler(http.StripPrefix(prefix, http.FileServer(http.FS(swaggerRoot))))
-}
-
-//================================================================================================================
-// Simulated API endpoint
-//================================================================================================================
-
-func apiUserHandler(router *mux.Router) {
-	router.PathPrefix("/{name}").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		fmt.Fprintf(w, "zzz: api -> Hello user %v\n", vars["name"])
-	})
-	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "zzz: api -> user route\n")
-	})
-}
-
-func newApiRouter(prefix string, router *mux.Router) *mux.Router {
-	// swagger-ui
-	apiSwaggerHandler(prefix, router.PathPrefix("/swagger-ui").Subrouter())
-	// /user
-	apiUserHandler(router.PathPrefix("/user").Subrouter())
-	// /fred
-	router.PathPrefix("/fred").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "zzz: api -> fred route\n")
-	})
-	// Root
-	router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "zzz: api -> / route\n")
-	})
-	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "zzz: api -> BASE route\n")
-	})
-	return router
 }
 
 //================================================================================================================
@@ -91,7 +47,7 @@ func main() {
 	router.Use(loggingMiddleware)
 
 	// API
-	newApiRouter("/api", router.PathPrefix("/api").Subrouter())
+	api.NewApiRouter("/api", router.PathPrefix("/api").Subrouter())
 
 	// Application (SPA - Reactjs)
 	{
