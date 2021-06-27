@@ -46,6 +46,8 @@ func NewApiRouter(prefix string, router *mux.Router) *mux.Router {
 	router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		viewTemplates.ExecuteTemplate(w, "index.html", nil)
 	})
-	router.Handle("", http.RedirectHandler(prefix+"/", http.StatusPermanentRedirect))
+	// Default
+	router.PathPrefix("").Handler(http.RedirectHandler(prefix+"/", http.StatusPermanentRedirect))
+
 	return router
 }
