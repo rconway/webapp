@@ -18,3 +18,5 @@ goroot*/
 go/
 webapp
 webapp-alpine
+
+tmp/

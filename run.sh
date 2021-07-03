@@ -4,6 +4,10 @@ ORIG_DIR="$(pwd)"
 cd "$(dirname "$0")"
 BIN_DIR="$(pwd)"
 
-trap "cd '${ORIG_DIR}'" EXIT
+onExit() {
+  cd "${ORIG_DIR}"
+}
 
-reflex -r \.go$ -s go run .
+trap onExit EXIT
+
+air
