@@ -11,7 +11,7 @@ import (
 // /login route
 //================================================================================================================
 
-func apiLoginHandler(router *mux.Router) {
+func apiLoginHandler(prefix string, router *mux.Router) {
 	// exact path '/'
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		viewTemplates.ExecuteTemplate(w, "login.html", "github/initiate")
@@ -23,5 +23,7 @@ func apiLoginHandler(router *mux.Router) {
 	})
 
 	// unmatched route - NOT FOUND
-	router.PathPrefix("").Handler(http.NotFoundHandler())
+	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, prefix+"/", http.StatusPermanentRedirect)
+	})
 }

@@ -13,10 +13,10 @@ import (
 func NewApiRouter(prefix string, router *mux.Router) *mux.Router {
 
 	// swagger-ui
-	apiSwaggerHandler(prefix, router.PathPrefix("/swagger-ui").Subrouter())
+	apiSwaggerHandler(prefix+"/swagger-ui", router.PathPrefix("/swagger-ui").Subrouter())
 
 	// /login
-	apiLoginHandler(router.PathPrefix("/login").Subrouter())
+	apiLoginHandler(prefix+"/login", router.PathPrefix("/login").Subrouter())
 
 	// /user
 	apiUserHandler(router.PathPrefix("/user").Subrouter())
