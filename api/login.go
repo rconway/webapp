@@ -13,7 +13,7 @@ import (
 //================================================================================================================
 
 func apiLoginHandler(prefix string, router *mux.Router) {
-	// exact path - base, i.e. ""
+	// exact path - base = ""
 	router.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
 		githubInitiateUrl := path.Base(r.URL.Path) + "/github/initiate"
 		redirectUrl := r.URL.Query().Get("redirect_url")
