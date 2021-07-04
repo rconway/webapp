@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 	"path"
 
@@ -12,18 +13,22 @@ import (
 //================================================================================================================
 
 func apiLoginHandler(prefix string, router *mux.Router) {
-	// exact path '/'
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		viewTemplates.ExecuteTemplate(w, "login.html", "github/initiate")
-	})
-
-	// exact path <blank>
+	// exact path - base, i.e. ""
 	router.HandleFunc("", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, path.Base(r.URL.Path)+"/", http.StatusPermanentRedirect)
+		githubInitiateUrl := path.Base(r.URL.Path) + "/github/initiate"
+		redirectUrl := r.URL.Query().Get("redirect_url")
+		if len(redirectUrl) > 0 {
+			log.Println("Got redirect_url =", redirectUrl)
+			githubInitiateUrl += "?redirect_url=" + redirectUrl
+		} else {
+			log.Println("NO redirect_url =>", r.URL.Query())
+		}
+		viewTemplates.ExecuteTemplate(w, "login.html", githubInitiateUrl)
 	})
 
-	// unmatched route - NOT FOUND
-	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, prefix+"/", http.StatusPermanentRedirect)
-	})
+	// exact path "/" - redirect to base
+	router.Handle("/", http.RedirectHandler(prefix+"", http.StatusPermanentRedirect))
+
+	// unmatched route - redirect to login base
+	router.PathPrefix("").Handler(http.RedirectHandler(prefix, http.StatusPermanentRedirect))
 }
