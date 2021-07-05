@@ -10,4 +10,6 @@ onExit() {
 
 trap onExit EXIT
 
+go install github.com/cosmtrek/air@latest
+
 air
