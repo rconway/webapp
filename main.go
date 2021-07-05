@@ -13,8 +13,8 @@ import (
 )
 
 //go:embed app/build
-var appRoot embed.FS
-var wwwRoot, _ = fs.Sub(appRoot, "app/build")
+var appFs embed.FS
+var appRoot, _ = fs.Sub(appFs, "app/build")
 
 //================================================================================================================
 // Middlewares
@@ -32,7 +32,7 @@ func newAppRouter(prefix string, router *mux.Router) *mux.Router {
 	// Could 'Use' some more middlewares here, if needed
 
 	// Just a single route for the whole app
-	router.PathPrefix("").Handler(http.StripPrefix(prefix, httputils.NewSpaHandler(wwwRoot)))
+	router.PathPrefix("").Handler(http.StripPrefix(prefix, httputils.NewSpaHandler(appRoot)))
 	return router
 }
 
@@ -72,6 +72,10 @@ func main() {
 		newAppRouter(prefix, appSubRouter)
 	}
 
+	// static assets
+	router.PathPrefix("/").Handler(http.FileServer(http.FS(wwwRoot)))
+
+	// TODO - this is now obsolete
 	// Unmatched route - redirect to base path
 	router.PathPrefix("").Handler(http.RedirectHandler("/", http.StatusPermanentRedirect))
 
