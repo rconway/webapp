@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -15,7 +14,10 @@ func NewApiRouter(prefix string, router *mux.Router) *mux.Router {
 
 	// exact path - base = ""
 	router.Handle("", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "API - base path")
+		values := struct {
+			Prefix string
+		}{prefix}
+		viewTemplates.ExecuteTemplate(w, "index.html", &values)
 	}))
 
 	// exact path "/" - redirect to base

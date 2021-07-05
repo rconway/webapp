@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"embed"
@@ -11,15 +11,11 @@ import (
 // Module initialisation
 //================================================================================================================
 
-func init() {
-	viewTemplates = utils.LoadViewTemplates("api", viewFS, "views/*")
-}
-
-//================================================================================================================
-// Load the view templates
-//================================================================================================================
-
 //go:embed views
 var viewFS embed.FS
 
 var viewTemplates *template.Template
+
+func init() {
+	viewTemplates = utils.LoadViewTemplates("root", viewFS, "views/*")
+}

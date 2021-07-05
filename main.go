@@ -46,6 +46,11 @@ func main() {
 	// Register middlewares
 	router.Use(loggingMiddleware)
 
+	// base path
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		viewTemplates.ExecuteTemplate(w, "index.html", nil)
+	})
+
 	// API
 	api.NewApiRouter("/api", router.PathPrefix("/api").Subrouter())
 
@@ -66,6 +71,9 @@ func main() {
 		// Create the app route handler with the subrouter and the prefix.
 		newAppRouter(prefix, appSubRouter)
 	}
+
+	// Unmatched route - redirect to base path
+	router.PathPrefix("").Handler(http.RedirectHandler("/", http.StatusPermanentRedirect))
 
 	http.ListenAndServe(":8080", router)
 }
