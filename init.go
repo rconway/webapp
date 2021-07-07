@@ -16,8 +16,8 @@ import (
 var wwwFs embed.FS
 var wwwRoot, _ = fs.Sub(wwwFs, "www")
 
-var viewTemplates *template.Template
+var wwwTemplates *template.Template
 
 func init() {
-	viewTemplates = utils.LoadViewTemplates("root", wwwFs, "www/*.html")
+	wwwTemplates = utils.LoadViewTemplates("root", wwwFs, "www/*.html")
 }

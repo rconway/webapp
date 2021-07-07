@@ -48,7 +48,7 @@ func main() {
 
 	// base path
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		viewTemplates.ExecuteTemplate(w, "index.html", nil)
+		wwwTemplates.ExecuteTemplate(w, "index.html", nil)
 	})
 
 	// API
