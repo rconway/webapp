@@ -73,11 +73,11 @@ func main() {
 	}
 
 	// static assets
-	router.PathPrefix("/").Handler(http.FileServer(http.FS(wwwRoot)))
-
-	// TODO - this is now obsolete
-	// Unmatched route - redirect to base path
-	router.PathPrefix("").Handler(http.RedirectHandler("/", http.StatusPermanentRedirect))
+	defaultContentFunc := func(httpFs http.FileSystem, w http.ResponseWriter, r *http.Request) {
+		// By default, redirect to base
+		http.Redirect(w, r, "", http.StatusPermanentRedirect)
+	}
+	router.PathPrefix("/").Handler(httputils.FileServerWithDefault(http.FS(wwwRoot), defaultContentFunc))
 
 	http.ListenAndServe(":8080", router)
 }
