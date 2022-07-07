@@ -12,4 +12,4 @@ EXENAME="${1:-$(basename "$PWD")-alpine}"
 ./build-app.sh
 
 # static go build...
-./build-exe.sh
+./build-service.sh

@@ -20,4 +20,4 @@ docker run --user $(id -u):$(id -g) --rm -it \
   -v $PWD/${GOROOT}/.cache:/.cache \
   -e GOPATH_BUILD=/src/webapp/${GOROOT}/go \
   golang:alpine \
-  sh /src/webapp/build-exe.sh "${EXENAME}"
+  sh /src/webapp/build-service.sh "${EXENAME}"
