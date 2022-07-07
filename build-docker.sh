@@ -9,15 +9,7 @@ trap "cd '${ORIG_DIR}'" EXIT
 EXENAME="${1:-$(basename "$PWD")}"
 
 # React app...
-./build-app.sh
+./build-app-docker.sh
 
-# go cache directory
-GOROOT="goroot"
-mkdir -p ${GOROOT}/.cache
-
-docker run --user $(id -u):$(id -g) --rm -it \
-  -v $PWD/..:/src \
-  -v $PWD/${GOROOT}/.cache:/.cache \
-  -e GOPATH_BUILD=/src/webapp/${GOROOT}/go \
-  golang \
-  sh /src/webapp/build-exe.sh "${EXENAME}"
+# Go service
+./build-service-docker.sh

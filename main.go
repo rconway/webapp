@@ -2,7 +2,9 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
+	"log"
 	"net/http"
 	"os"
 
@@ -79,5 +81,6 @@ func main() {
 	}
 	router.PathPrefix("/").Handler(httputils.FileServerWithDefault(http.FS(wwwRoot), defaultContentFunc))
 
-	http.ListenAndServe(":8080", router)
+	fmt.Println("Running service at http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
