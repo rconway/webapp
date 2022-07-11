@@ -6,4 +6,6 @@ BIN_DIR="$(pwd)"
 
 trap "cd '${ORIG_DIR}'" EXIT
 
-./docker-node /src/create-app.sh
+echo "Creating the React app..."
+npx create-react-app app
+echo "...created app."

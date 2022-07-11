@@ -8,9 +8,6 @@ trap "cd '${ORIG_DIR}'" EXIT
 
 EXENAME="${1:-$(basename "$PWD")-alpine}"
 
-# React app...
-./build-app.sh
-
 # go cache directory
 GOROOT="goroot-alpine"
 mkdir -p ${GOROOT}/.cache
