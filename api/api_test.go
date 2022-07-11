@@ -8,9 +8,12 @@ import (
 
 func TestTemplateLoad(t *testing.T) {
 	const prefix = "; defined templates are: "
-	const expectedNumLoadedTemplates = 1
+	const expectedNumLoadedTemplates = 2
 	loadedTemplatesList := viewTemplates.DefinedTemplates()[len(prefix):]
 	loadedTemplates := strings.Split(loadedTemplatesList, ",")
+	for i := range loadedTemplates {
+		loadedTemplates[i] = strings.TrimSpace(loadedTemplates[i])
+	}
 	numLoadedTemplates := len(loadedTemplates)
 	if numLoadedTemplates != expectedNumLoadedTemplates {
 		log.Println("Loaded templates...")
