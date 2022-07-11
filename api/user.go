@@ -14,9 +14,9 @@ import (
 func apiUserHandler(router *mux.Router) {
 	router.PathPrefix("/{name}").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		fmt.Fprintf(w, "zzz: api -> Hello user %v\n", vars["name"])
+		fmt.Fprintf(w, "api -> Hello user %v", vars["name"])
 	})
 	router.PathPrefix("").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "zzz: api -> user route\n")
+		fmt.Fprintf(w, "api -> user route")
 	})
 }
