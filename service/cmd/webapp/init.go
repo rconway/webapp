@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"io/fs"
 
-	"github.com/rconway/webapp/utils"
+	"github.com/rconway/webapp/service/pkg/utils"
 )
 
 //================================================================================================================

@@ -9,7 +9,7 @@ trap "cd '${ORIG_DIR}'" EXIT
 EXENAME="${1:-$(basename "$PWD")-alpine}"
 
 # React app...
-./build-app.sh
+./ui/build-app.sh
 
 # static go build...
-./build-service.sh
+./service/build-service.sh

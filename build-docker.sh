@@ -9,7 +9,7 @@ trap "cd '${ORIG_DIR}'" EXIT
 EXENAME="${1:-$(basename "$PWD")}"
 
 # React app...
-./build-app-docker.sh
+./ui/build-app-docker.sh
 
 # Go service
-./build-service-docker.sh
+./service/build-service-docker.sh

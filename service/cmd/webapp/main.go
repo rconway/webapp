@@ -11,12 +11,12 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rconway/goutils/httputils"
-	"github.com/rconway/webapp/api"
+	"github.com/rconway/webapp/service/pkg/api"
 )
 
-//go:embed app/build
+//go:embed app
 var appFs embed.FS
-var appRoot, _ = fs.Sub(appFs, "app/build")
+var appRoot, _ = fs.Sub(appFs, "app")
 
 //================================================================================================================
 // Middlewares

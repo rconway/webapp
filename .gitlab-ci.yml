@@ -1,0 +1,38 @@
+stages:          # Stages comprise jobs
+  - test         # Stages run in sequence
+  - package      # Jobs within a stage run in parallel
+  - deploy       # Each job can run on a different runner
+
+unit-test:
+  stage: test
+  image: golang:latest
+  script:
+    - ./service/test-service.sh
+
+package-container:
+  stage: package
+  image: docker:latest
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_USER" -p "$CI_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY/rconway/webapp .
+    - docker push $CI_REGISTRY/rconway/webapp
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no devtools@178.79.141.254 "docker login -u $CI_USER -p $CI_PASSWORD $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no devtools@178.79.141.254 "docker pull $CI_REGISTRY/rconway/webapp"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no devtools@178.79.141.254 "docker container rm -f webapp || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no devtools@178.79.141.254 "docker run -d -p 8080:8080 --name webapp $CI_REGISTRY/rconway/webapp"
+  environment:
+    name: testing
+    url: http://178.79.141.254:8080/
+    deployment_tier: testing

@@ -4,7 +4,7 @@ import (
 	"embed"
 	"html/template"
 
-	"github.com/rconway/webapp/utils"
+	"github.com/rconway/webapp/service/pkg/utils"
 )
 
 //================================================================================================================

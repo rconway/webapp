@@ -11,7 +11,11 @@ echo "Building the React app..."
 if [ ! -d node_modules ]; then
   echo "  Installing dependencies..."
   npm install
+  let status=$?
 fi
 npm run build
+let status=$status+$?
 echo "...built app."
 popd
+
+exit $status

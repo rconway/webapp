@@ -1,0 +1,6 @@
+service/cmd/webapp/app/
+service/go/
+service/goroot/
+service/goroot-alpine/
+ui/app/build/
+ui/app/node_modules/

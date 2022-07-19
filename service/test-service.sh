@@ -8,8 +8,8 @@ trap "cd '${ORIG_DIR}'" EXIT
 
 # Running go tests
 echo "Running service tests..."
-go test -v ./api/...
-let status=$?
+go test -v ./pkg/api/...
+status=$?
 echo "...service tests done"
 
 exit $status

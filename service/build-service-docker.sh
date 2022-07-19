@@ -6,6 +6,8 @@ BIN_DIR="$(pwd)"
 
 trap "cd '${ORIG_DIR}'" EXIT
 
+EXENAME="${1:-webapp}"
+
 # go cache directory
 GOROOT="goroot"
 mkdir -p ${GOROOT}/.cache
@@ -13,6 +15,6 @@ mkdir -p ${GOROOT}/.cache
 docker run --user $(id -u):$(id -g) --rm -it \
   -v $PWD/..:/src \
   -v $PWD/${GOROOT}/.cache:/.cache \
-  -e GOPATH_BUILD=/src/webapp/${GOROOT}/go \
+  -e GOPATH_BUILD=/src/service/${GOROOT}/go \
   golang \
-  /src/webapp/test-service.sh
+  /src/service/build-service.sh "${EXENAME}"
