@@ -81,6 +81,6 @@ func main() {
 	}
 	router.PathPrefix("/").Handler(httputils.FileServerWithDefault(http.FS(wwwRoot), defaultContentFunc))
 
-	fmt.Println("Running service at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Printf("Running service at http://0.0.0.0:%v\n", servicePort)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", servicePort), router))
 }
