@@ -58,20 +58,19 @@ func main() {
 
 	// Application (SPA - Reactjs)
 	{
-		// We can use a prefix for the SPA app, as long as we specify the same prefix in the "homepage" field
-		// in the package.json file...
-		// ```
-		// {
-		//   "homepage": "/app"
-		// }
-		//
-		// $ npm run build
-		// ```
 		prefix := "/app"
-		// Create a subrouter at the prefix path
-		appSubRouter := router.PathPrefix(prefix).Subrouter()
-		// Create the app route handler with the subrouter and the prefix.
-		newAppRouter(prefix, appSubRouter)
+
+		// The Single-Page-Application should be delivered from the prefix path with a trailing '/'.
+		// This is important to ensure that relative paths used within the SPA inherit the full path,
+		// including the prefix.
+		spaPrefix := prefix + "/"
+		appSubRouter := router.PathPrefix(spaPrefix).Subrouter() // Subrouter for SPA
+		newAppRouter(prefix, appSubRouter)                       // Handler for SPA
+
+		// For the 'bare' prefix path (with no trailing '/') we redirect to add the trailing '/',
+		// being careful to use a relative path here.
+		redirectionPrefix := "." + spaPrefix
+		router.PathPrefix(prefix).Handler(http.RedirectHandler(redirectionPrefix, http.StatusTemporaryRedirect))
 	}
 
 	// static assets
