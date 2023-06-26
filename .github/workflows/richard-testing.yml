@@ -47,7 +47,7 @@ jobs:
         run: |
           set +e
           curl localhost:8080
-          test $? -eq 7
+          test $? -eq 6
 
       # - name: Log in to registry - ${{ env.REGISTRY }}
       #   uses: docker/login-action@v2.1.0
