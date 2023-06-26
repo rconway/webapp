@@ -31,9 +31,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       
+      - name: Build container image locally
+        run: |
+          docker build -t webapp .
+      
       - name: Run webapp
         run: |
-          docker run --rm -d --name webapp -p 8080:8080 rconway/webapp
+          docker run --rm -d --name webapp -p 8080:8080 webapp
       
       - name: Check webapp
         run: |
