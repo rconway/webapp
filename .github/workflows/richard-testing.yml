@@ -45,6 +45,7 @@ jobs:
       
       - name: Check webapp again
         run: |
+          set +e
           curl localhost:8080
           test $? -eq 7
 
