@@ -24,8 +24,8 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build_and_publish:
-    name: Build and Push Container image to Docker Hub
+  test_webapp:
+    name: Test the webapp
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -42,6 +42,10 @@ jobs:
       - name: Stop webapp
         run: |
           docker stop webapp
+      
+      - name: Check webapp again
+        run: |
+          curl localhost:8080
 
       # - name: Log in to registry - ${{ env.REGISTRY }}
       #   uses: docker/login-action@v2.1.0
