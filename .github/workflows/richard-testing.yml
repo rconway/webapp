@@ -31,20 +31,17 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       
-      - name: List files
+      - name: Run webapp
         run: |
-          ls -al
-          date > a.a
+          docker run --rm -d --name webapp -p 8080:8080 rconway/webapp
       
-      - name: List files again
+      - name: Check webapp
         run: |
-          ls -al
-          cat a.a
+          curl localhost:8080
       
-      - name: Docker commands
+      - name: Stop webapp
         run: |
-          docker images
-          docker ps -a
+          docker stop webapp
 
       # - name: Log in to registry - ${{ env.REGISTRY }}
       #   uses: docker/login-action@v2.1.0
