@@ -49,3 +49,14 @@ Add the setting...
 ```json
   "homepage": "/app",
 ```
+
+## Build Automation
+
+### GitHub Action - `Build and Publish Container`
+
+The GitHub action [`build-and-publish-container.yml`](.github/workflows/build-and-publish-container.yml) will build the container image and publish to DockerHub.
+
+The image will be tagged as...
+* branch name
+* `vX.Y.Z` for git tags conforming to semver notation
+* `latest` for commits to the default branch of the repo (`main`)
