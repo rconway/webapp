@@ -9,4 +9,21 @@ onExit() {
 }
 trap onExit EXIT
 
-curl webapp:8080
+# Exit immediately if a command fails
+set -e
+
+echo "Test service root"
+curl -v webapp:8080
+
+echo "Test API root"
+curl -v webapp:8080/api
+
+echo "Test APP root"
+curl -v webapp:8080/app
+
+echo "Test error case (wrong port)"
+set +e
+curl -v webapp:8081
+let status=$?
+set -e
+test $status -eq 7
