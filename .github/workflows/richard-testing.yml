@@ -31,27 +31,20 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       
-      - name: Build container image locally
-        run: |
-          docker build -t webapp .
-      
       - name: Run webapp
         run: |
-          docker run --rm -d --name webapp -p 8080:8080 webapp
+          docker build -t webapp .
+          docker network create webapptest
+          docker run --rm -d --network webapptest --name webapp webapp
       
-      - name: Check webapp
+      - name: Run webapp tests
         run: |
-          curl localhost:8080
-      
+          docker build -t webapptest test
+          docker run --rm --network webapptest --name webapptest webapptest
+    
       - name: Stop webapp
         run: |
           docker stop webapp
-      
-      - name: Check webapp again
-        run: |
-          set +e
-          curl localhost:8080
-          test $? -eq 7
 
       # - name: Log in to registry - ${{ env.REGISTRY }}
       #   uses: docker/login-action@v2.1.0
