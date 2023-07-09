@@ -9,19 +9,25 @@ onExit() {
 }
 trap onExit EXIT
 
+heading() {
+  echo -e "\n\n##########"
+  echo "### ${1}"
+  echo -e "##########\n"
+}
+
 # Exit immediately if a command fails
 set -e
 
-echo -e "\n\n### Test service root"
+heading "Test service root"
 curl -v webapp:8080
 
-echo -e "\n\n### Test API root"
+heading "Test API root"
 curl -v webapp:8080/api
 
-echo -e "\n\n### Test APP root"
+heading "Test APP root"
 curl -v webapp:8080/app
 
-echo -e "\n\n### Test error case (wrong port)"
+heading "Test error case (wrong port)"
 set +e
 curl -v webapp:8081
 let status=$?
