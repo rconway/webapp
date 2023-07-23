@@ -2,7 +2,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Richard Testing
+name: Build, Test and Publish Container
 
 on:
   # via github UI
@@ -24,8 +24,8 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  test_webapp:
-    name: Test the webapp
+  build_test_and_publish:
+    name: Build, Test and Push Container image to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
