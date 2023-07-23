@@ -2,7 +2,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Build and Publish Container
+name: Richard Testing
 
 on:
   # via github UI
@@ -24,13 +24,28 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build_and_publish:
-    name: Build and Push Container image to Docker Hub
+  test_webapp:
+    name: Test the webapp
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
       
+      - name: Build & Run webapp
+        run: |
+          docker build -t webapp .
+          docker network create webapptest
+          docker run --rm -d --network webapptest --name webapp webapp
+      
+      - name: Build & Run Run webapp tests
+        run: |
+          docker build -t webapptest test
+          docker run --rm --network webapptest --name webapptest webapptest
+    
+      - name: Stop webapp
+        run: |
+          docker stop webapp
+
       - name: Log in to registry - ${{ env.REGISTRY }}
         uses: docker/login-action@v2.1.0
         with:
